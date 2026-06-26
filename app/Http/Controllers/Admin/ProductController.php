@@ -9,7 +9,16 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    public function index()    { return view('admin.products.index', ['products' => Product::with('category')->latest()->paginate(15)]); }
+    public function index(Request $r) {
+        $search = $r->input('search');
+        $products = Product::with('category')
+            ->when($search, function($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(15);
+        return view('admin.products.index', ['products' => $products, 'search' => $search]);
+    }
     public function create()   { return view('admin.products.form', ['product' => new Product(), 'categories' => Category::all()]); }
 
     public function store(Request $r) {

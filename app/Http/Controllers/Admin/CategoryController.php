@@ -10,7 +10,16 @@ use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
-    public function index()             { return view('admin.categories.index', ['categories' => Category::withCount('products')->orderBy('id', 'desc')->get()]); }
+    public function index(Request $r) {
+        $search = $r->input('search');
+        $categories = Category::withCount('products')
+            ->when($search, function($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('admin.categories.index', ['categories' => $categories, 'search' => $search]);
+    }
 
     public function create()            { return view('admin.categories.form', ['category' => new Category()]); }
 public function store(Request $r) {

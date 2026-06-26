@@ -3,11 +3,24 @@
 @section('title', 'Categories')
 
 @section('content')
-<div class="mb-6">
+<div class="mb-6 flex justify-between items-center">
     <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition duration-200">
         <i class="fas fa-plus mr-2"></i>
         Add New Category
     </a>
+    <form method="GET" action="{{ route('admin.categories.index') }}" class="flex items-center">
+        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search categories..." class="px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+        <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-r-lg transition duration-200">
+            <i class="fas fa-search mr-2"></i>
+            Search
+        </button>
+        @if($search ?? false)
+        <a href="{{ route('admin.categories.index') }}" class="ml-3 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg transition duration-200">
+            <i class="fas fa-times mr-2"></i>
+            Clear
+        </a>
+        @endif
+    </form>
 </div>
 
 <div class="bg-white rounded-xl shadow-lg overflow-hidden">

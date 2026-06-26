@@ -5,6 +5,7 @@ namespace App\Models;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Cart;
 
 class User extends Authenticatable
 {
@@ -24,5 +25,13 @@ class User extends Authenticatable
 
     public function orders() {
         return $this->hasMany(Order::class);
+    }
+
+    public function wishlist() {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function cart() {
+        return $this->hasMany(Cart::class);
     }
 }

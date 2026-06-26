@@ -113,4 +113,25 @@ class ProductController extends Controller
     public function categories() {
         return response()->json(Category::withCount('products')->get());
     }
+
+    public function image($id) {
+        $product = Product::findOrFail($id);
+
+        if (!$product->image) {
+            return response()->json(['message' => 'No image found'], 404);
+        }
+
+        $path = storage_path('app/public/' . $product->image);
+
+        if (!file_exists($path)) {
+            return response()->json(['message' => 'Image file not found'], 404);
+        }
+
+        $mimeType = mime_content_type($path);
+        $file = file_get_contents($path);
+
+        return response($file, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"');
+    }
 }

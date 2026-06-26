@@ -55,4 +55,16 @@ class AuthController extends Controller
             'token' => $token,
         ]);
     }
+
+    public function logout(Request $request)
+    {
+        // Check if user is authenticated before trying to delete token
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+        }
+
+        return response()->json([
+            'message' => 'Logout successful'
+        ]);
+    }
 }

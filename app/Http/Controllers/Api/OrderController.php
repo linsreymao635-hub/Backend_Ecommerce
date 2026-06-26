@@ -25,9 +25,16 @@ class OrderController extends Controller
         if ($cartItems->isEmpty())
             return response()->json(['message' => 'Cart is empty'], 400);
 
-        $total = $cartItems->sum(fn($i) => $i->product->price * $i->quantity);
+        $subtotal = $cartItems->sum(fn($i) => $i->product->price * $i->quantity);
+        $taxRate = 0.10; // 10% tax rate - you can make this configurable
+        $taxAmount = $subtotal * $taxRate;
+        $total = $subtotal + $taxAmount;
+
         $order = Order::create([
             'user_id'          => $request->user()->id,
+            'subtotal'         => $subtotal,
+            'tax_amount'       => $taxAmount,
+            'tax_rate'         => $taxRate * 100, // Store as percentage
             'total_amount'     => $total,
             'shipping_address' => $request->shipping_address,
         ]);

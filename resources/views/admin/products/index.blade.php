@@ -3,10 +3,23 @@
 @section('title', 'Products')
 
 @section('content')
-<div class="mb-6">
+<div class="mb-6 flex justify-between items-center">
     <a href="{{ route('admin.products.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5">
         <i class="fas fa-plus mr-2"></i> Add New Product
     </a>
+    <form method="GET" action="{{ route('admin.products.index') }}" class="flex items-center">
+        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search products..." class="px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-r-lg transition duration-200">
+            <i class="fas fa-search mr-2"></i>
+            Search
+        </button>
+        @if($search ?? false)
+        <a href="{{ route('admin.products.index') }}" class="ml-3 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg transition duration-200">
+            <i class="fas fa-times mr-2"></i>
+            Clear
+        </a>
+        @endif
+    </form>
 </div>
 
 <div class="bg-white rounded-xl shadow-lg overflow-hidden">

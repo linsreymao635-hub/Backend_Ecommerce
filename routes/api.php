@@ -12,11 +12,14 @@ Route::get('/categories/{id}',   [CategoryController::class, 'show']);
 
 Route::get('/products',          [ProductController::class, 'index']);
 Route::get('/products/{id}',     [ProductController::class, 'show']);
+Route::get('/products/{id}/image', [ProductController::class, 'image']);
 Route::get('/products/{id}/reviews', [ReviewController::class, 'index']);
+
+// Logout can be called without authentication (token will be invalid anyway)
+Route::post('/logout', [AuthController::class, 'logout']);
 
 // Protected routes (Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout',              [AuthController::class, 'logout']);
     Route::get('/profile',              [AuthController::class, 'profile']);
     Route::put('/profile',              [AuthController::class, 'updateProfile']);
     Route::put('/change-password',      [AuthController::class, 'changePassword']);

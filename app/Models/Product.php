@@ -26,6 +26,6 @@ class Product extends Model {
     public function orderItems(){ return $this->hasMany(OrderItem::class); }
 
     public function getImageUrlAttribute() {
-        return $this->image ? asset('storage/' . $this->image) : null;
+        return $this->image ? url('/api/products/' . $this->id . '/image') : null;
     }
 }
