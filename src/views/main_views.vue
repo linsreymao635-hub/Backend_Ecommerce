@@ -32,7 +32,7 @@
         <ProductCard v-for="p in products" :key="p.id" :product="p" />
       </div>
       <div class="text-center" style="margin-top:28px">
-        <router-link to="/products" class="btn btn-outline">View All Products</router-link>
+        <router-link to="/products" class="btn btn-outline">View Products</router-link>
       </div>
     </section>
   </div>
@@ -73,7 +73,6 @@ onMounted(async () => {
 <template>
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">All Products</h1>
     </div>
     <div class="products-layout">
       <!-- Sidebar filter -->

@@ -20,7 +20,7 @@ class ProductController extends Controller
         if ($request->max_price)   $q->where('price', '<=', $request->max_price);
 
         $products = Cache::remember($cacheKey, 300, function () use ($q) {
-            return $q->paginate(12);
+            return $q->orderByDesc('id')->paginate(12);
         });
 
         return response()->json($products);
@@ -51,6 +51,9 @@ class ProductController extends Controller
         }
 
         $product = Product::create($data);
+
+        // Clear products cache
+        Cache::flush('products:*');
 
         return response()->json([
             'message' => 'Product created successfully',
@@ -85,6 +88,9 @@ class ProductController extends Controller
 
         $product->update($data);
 
+        // Clear products cache
+        Cache::flush('products:*');
+
         return response()->json([
             'message' => 'Product updated successfully',
             'product' => $product,
@@ -97,6 +103,10 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->image);
         }
         $product->delete();
+
+        // Clear products cache
+        Cache::flush('products:*');
+
         return response()->json(['message' => 'Product deleted successfully']);
     }
 

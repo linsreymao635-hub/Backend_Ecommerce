@@ -14,7 +14,6 @@
       </div>
       <div v-if="!loading && products.length === 0" class="text-center py-12 text-gray-500">
         <i class="fas fa-box-open text-5xl mb-3 text-gray-300"></i>
-        <p class="text-lg">No products found</p>
       </div>
     </div>
   </div>
