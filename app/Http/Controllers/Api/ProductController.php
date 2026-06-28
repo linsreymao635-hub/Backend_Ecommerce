@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\{Product, Category, Review};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -19,8 +20,9 @@ class ProductController extends Controller
         if ($request->min_price)   $q->where('price', '>=', $request->min_price);
         if ($request->max_price)   $q->where('price', '<=', $request->max_price);
 
-        $products = Cache::remember($cacheKey, 300, function () use ($q) {
-            return $q->orderByDesc('id')->paginate(12);
+        $perPage = $request->get('per_page', 12);
+        $products = Cache::remember($cacheKey, 300, function () use ($q, $perPage) {
+            return $q->orderByDesc('id')->paginate($perPage);
         });
 
         return response()->json($products);
@@ -53,7 +55,7 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         // Clear products cache
-        Cache::flush('products:*');
+        Cache::flush();
 
         return response()->json([
             'message' => 'Product created successfully',
@@ -89,7 +91,7 @@ class ProductController extends Controller
         $product->update($data);
 
         // Clear products cache
-        Cache::flush('products:*');
+        Cache::flush();
 
         return response()->json([
             'message' => 'Product updated successfully',
@@ -105,7 +107,7 @@ class ProductController extends Controller
         $product->delete();
 
         // Clear products cache
-        Cache::flush('products:*');
+        Cache::flush();
 
         return response()->json(['message' => 'Product deleted successfully']);
     }
