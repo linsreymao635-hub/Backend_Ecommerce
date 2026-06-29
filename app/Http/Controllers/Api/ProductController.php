@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     public function index(Request $request) {
-        $cacheKey = 'products:' . md5(json_encode($request->all()));
-
         $q = Product::with('category')->where('is_active', true);
         if ($request->category_id) $q->where('category_id', $request->category_id);
         if ($request->search)      $q->where('name', 'like', '%' . $request->search . '%');
@@ -21,9 +19,7 @@ class ProductController extends Controller
         if ($request->max_price)   $q->where('price', '<=', $request->max_price);
 
         $perPage = $request->get('per_page', 12);
-        $products = Cache::remember($cacheKey, 300, function () use ($q, $perPage) {
-            return $q->orderByDesc('id')->paginate($perPage);
-        });
+        $products = $q->orderByDesc('id')->paginate($perPage);
 
         return response()->json($products);
     }
