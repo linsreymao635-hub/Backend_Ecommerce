@@ -1,11 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\{AuthController, ProductController, CategoryController, WishlistController, CartController, OrderController, ReviewController};
+use App\Http\Controllers\Api\{AuthController, ProductController, CategoryController, WishlistController, CartController, OrderController, ReviewController, SocialAuthController};
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
+
+// Social Login Routes
+Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+
+Route::get('/auth/facebook', [SocialAuthController::class, 'redirectToFacebook']);
+Route::get('/auth/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
+
+Route::get('/auth/github', [SocialAuthController::class, 'redirectToGithub']);
+Route::get('/auth/github/callback', [SocialAuthController::class, 'handleGithubCallback']);
 
 Route::get('/categories',        [CategoryController::class, 'index']);
 Route::get('/categories/{id}',   [CategoryController::class, 'show']);
